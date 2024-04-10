@@ -296,7 +296,7 @@ export default {
           if (index !== -1) {
             currentUrl = currentUrl.slice(0, index);
           }
-          window.location.href = currentUrl + '#/Index';
+          window.location.href = currentUrl + '#/Home';
         } else {
           this.loading=false;
           this.confirm_disabled = false;
