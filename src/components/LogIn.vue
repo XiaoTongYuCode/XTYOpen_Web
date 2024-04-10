@@ -33,6 +33,7 @@ export default {
       code:'',
       typeLog:'',
       GoogleId: "903775319941-h0b8q3qvip0b7t6dubfa6ir9pqd65r6c.apps.googleusercontent.com",
+      bgUrl: require('../assets/img/bg.jpg'),
       httpsBack: this.$httpUrl,
       sexs: [
         {
@@ -388,7 +389,7 @@ export default {
 </script>
 
 <template>
-  <div style="background-color: #333333;">
+  <div :style="{ 'background-image': 'url(' + bgUrl + ')' }">
     <div class="loginOutLine">
       <div class="loginOut">
         <h2 class="login-title">XTYOpen</h2>
@@ -467,14 +468,13 @@ export default {
     </div>
 
     <!--    以下根据是否为手机选择切换背景为MP4还是GIF格式-->
-    <div class="video-container" v-if="!isMobile">
+<!--    <div class="video-container" v-if="!isMobile">
       <video ref="videoRef" autoplay class="video" loop muted>
         <source src="../assets/video/grassland.mp4" type="video/mp4"/>
       </video>
     </div>
     <div class="MobileBack" v-if="isMobile">
-      <!--      gif全屏图-->
-    </div>
+    </div>-->
 
     <el-dialog
         :before-close="handleClose"
