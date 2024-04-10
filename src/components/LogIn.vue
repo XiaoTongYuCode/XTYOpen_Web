@@ -389,7 +389,7 @@ export default {
 </script>
 
 <template>
-  <div :style="{ 'background-image': 'url(' + bgUrl + ')' }">
+  <div style="background-color: #475669;">
     <div class="loginOutLine">
       <div class="loginOut">
         <h2 class="login-title">XTYOpen</h2>
@@ -475,6 +475,9 @@ export default {
     </div>
     <div class="MobileBack" v-if="isMobile">
     </div>-->
+    <div class="ImgBack">
+
+    </div>
 
     <el-dialog
         :before-close="handleClose"
@@ -533,6 +536,18 @@ export default {
   z-index: -100;
   position: fixed;
   background-image: url("../assets/video/ingame.gif");
+  background-size: cover;
+  background-position: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.ImgBack{
+  z-index: -100;
+  position: fixed;
+  background-image: url("../assets/img/bg.jpg");
   background-size: cover;
   background-position: center;
   top: 0;

@@ -109,7 +109,7 @@ export default {
       }
     });
     // 启动开发者工具检测器
-    devtoolsDetector.launch();
+    // devtoolsDetector.launch();
   },
   methods:{
     refuse(){//未通过，跳转其他页面
