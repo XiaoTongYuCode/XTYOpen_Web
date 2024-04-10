@@ -324,7 +324,12 @@ export default {
     },
     thirdClick(type){
       this.thirdLoading = true;
-      this.$axios.get(this.$httpUrl + '/user/thirdLogin?type=' + type).then(res => res.data).then(res => {
+      // 获取当前页面的URL
+      const currentUrl = window.location.href;
+      this.$axios.post(this.$httpUrl + '/user/thirdLogin?type=',{
+        url:currentUrl,
+        type:type,
+      }).then(res => res.data).then(res => {
         window.open(res, '_blank');
         this.thirdLoading = false;
       })
