@@ -1,5 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
+import sha256 from 'crypto-js/sha256';
+import Base64 from 'crypto-js/enc-base64';
 export default {
   name: "UserContour",
   data() {
@@ -116,7 +118,7 @@ export default {
         this.form.id = row.id;
         this.form.no = row.no;
         this.form.name = row.name;
-        this.form.password = row.password;
+        this.form.password = '';
         this.form.age = row.age;
         this.form.sex = row.sex + '';
         this.form.phone = row.phone;
@@ -124,8 +126,6 @@ export default {
     },
     // 删除
     del(id) {
-      console.log(id)
-
       this.$axios.get(this.$httpUrl + '/user/delete?id='+ id).then(res => res.data).then(res => {
         if (res.code == 200) {
           this.$message({
@@ -168,6 +168,7 @@ export default {
     },
     doMod() {
       this.loading = true;
+      this.form.password = sha256(this.form.password + 'xtyopen').toString(Base64);
       this.$axios.post(this.$httpUrl + '/user/update', this.form).then(res => res.data)
           .then(res => {
             console.log(res)
@@ -191,6 +192,7 @@ export default {
     },
     doSave() {
       this.loading = true;
+      this.form.password = sha256(this.form.password + 'xtyopen').toString(Base64);
       this.$axios.post(this.$httpUrl + '/user/save', this.form).then(res => res.data)
           .then(res => {
             console.log(res)
@@ -243,7 +245,6 @@ export default {
 
 <template>
   <div>
-
     <div style="margin: 10px 5px; display: flex; justify-content: space-between; /* 水平居中 */">
       <div>
         <el-input

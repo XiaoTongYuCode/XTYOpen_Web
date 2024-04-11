@@ -5,7 +5,7 @@ export default {
   name: "Aside",
   data() {
     return {
-
+      user:JSON.parse(sessionStorage.getItem('CurUser')),
     }
   },
   computed:{ //创建时执行（有计算时用）
@@ -31,8 +31,9 @@ export default {
           title: JSON.parse(sessionStorage.getItem('CurUser')).name,
           message: '您已退出登陆',
         });
-        this.$router.replace('/')
         sessionStorage.clear()
+        localStorage.clear()
+        this.$router.replace('/')
       }).catch(() => {
 
       })
@@ -63,12 +64,12 @@ export default {
       <span slot="title">{{ item.menuName }}</span>
     </el-menu-item>
 
-    <el-menu-item index="/Chat">
+    <el-menu-item index="/Chat" v-if="user.id!==0">
       <i class="el-icon-chat-line-round"></i>
       <span slot="title">聊天室</span>
     </el-menu-item>
 
-    <el-menu-item index="/UserHome">
+    <el-menu-item index="/UserHome" v-if="user.id!==0">
       <i class="el-icon-s-custom"></i>
       <span slot="title">个人中心</span>
     </el-menu-item>

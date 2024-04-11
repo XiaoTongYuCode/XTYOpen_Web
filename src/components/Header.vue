@@ -37,8 +37,9 @@ export default {
           title: this.user.name,
           message: '您已退出登陆',
         });
-        this.$router.replace('/')
         sessionStorage.clear()
+        localStorage.clear()
+        this.$router.replace('/')
       }).catch(() => {
 
       })
@@ -104,12 +105,12 @@ export default {
             <span v-if="menuFont" slot="title">{{ item.menuName }}</span>
           </el-menu-item>
 
-          <el-menu-item index="/Chat">
+          <el-menu-item index="/Chat" v-if="user.id!==0">
             <i class="el-icon-chat-line-round"></i>
             <span v-if="menuFont" slot="title">聊天</span>
           </el-menu-item>
 
-          <el-menu-item index="/UserHome">
+          <el-menu-item index="/UserHome" v-if="user.id!==0">
             <i class="el-icon-s-custom"></i>
             <span v-if="menuFont" slot="title">个人中心</span>
           </el-menu-item>
@@ -126,7 +127,7 @@ export default {
         <span style="font-size: 16px; font-weight: bold">{{ this.user.name }}</span>
         <i class="el-icon-arrow-down" style="margin-left: 5px; margin-right: 10px;"></i>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="toUser">个人中心</el-dropdown-item>
+          <el-dropdown-item @click.native="toUser" v-if="user.id!==0">个人中心</el-dropdown-item>
           <el-dropdown-item @click.native="logOut">退出登陆</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

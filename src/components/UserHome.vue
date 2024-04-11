@@ -88,7 +88,7 @@ export default {
       this.$nextTick(() => {
         this.form.id = this.user.id;
         this.form.name = this.user.name;
-        this.form.password = this.user.password;
+        this.form.password = '';
         this.form.age = this.user.age;
         this.form.sex = this.user.sex + '';
         this.form.phone = this.user.phone;

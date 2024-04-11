@@ -110,6 +110,24 @@ export default {
     });
     // 启动开发者工具检测器
     // devtoolsDetector.launch();
+    if(!sessionStorage.getItem('CurUser')) {
+      const user = {
+          age:0,
+          avatar:null,
+          id:0,
+          isvalid:"Y",
+          level:0,
+          likes:0,
+          name:"访客",
+          no:"访客",
+          password:"nXFp+oD/Ym+1bsvP//jK3slXxuHIXp9AM/q1zgkV2uw=",
+          phone:"",
+          postnum:0,
+          roleId:2,
+          sex:0
+      }
+      sessionStorage.setItem("CurUser", JSON.stringify(user))
+    }
   },
   methods:{
     refuse(){//未通过，跳转其他页面

@@ -8,6 +8,7 @@ export default {
   components: {Music, HeaderMobile, Header},
   data(){
     return{
+      user: JSON.parse(sessionStorage.getItem('CurUser')),
       isCollapse:true,
       isMobile: false, //手机端
       aside_width:'64px',//200px
@@ -55,7 +56,7 @@ export default {
 <!--      <Aside :isCollapse="isCollapse"></Aside>-->
 <!--    </el-aside>-->
 
-    <Music></Music>
+    <Music v-if="user.id!==0"></Music>
 
     <el-container style="height: 100%;">
       <el-header v-if="!this.isMobile" style="text-align: right; font-size: 12px; height: 100%;">

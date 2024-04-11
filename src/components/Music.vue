@@ -530,7 +530,7 @@ function musicCheckUrl(file) {
             <p class="artist">ZYJ</p>
           </div>
           <div class="progress-bar">
-            <el-progress :percentage="currentPercentage?currentPercentage:0" stroke-width="4"
+            <el-progress :percentage="currentPercentage?currentPercentage:0" :stroke-width="4"
                          color="#2d2d2d" define-back-color="#dadada" :show-text=false></el-progress>
           </div>
           <div class="buttons">

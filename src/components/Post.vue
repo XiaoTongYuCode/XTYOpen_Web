@@ -195,7 +195,7 @@ export default {
         <div class="text item" style="white-space: pre-line; padding: 0 15px; min-height: 150px; ">
           <div class="ql-editor" v-html="item.post.name" v-highlight></div>
         </div>
-        <div style="display: flex; justify-content:flex-end;">
+        <div style="display: flex; justify-content:flex-end;" v-if="user.id!==0">
             <span
                 style="font-weight: bold; color: #0043a1; text-shadow: 0px 2px 3px rgb(73,230,255); position: relative; top: 5px;">
               {{ item.post.likenum }}

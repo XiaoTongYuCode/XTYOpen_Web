@@ -4,7 +4,7 @@ export default {
   name: "HeaderMobile",
   data() {
     return {
-
+      user: JSON.parse(sessionStorage.getItem('CurUser')),
     }
   },
   created() {
@@ -22,8 +22,9 @@ export default {
       this.$notify({
         title: '您已退出登陆',
       });
-      this.$router.replace('/')
       sessionStorage.clear()
+      localStorage.clear()
+      this.$router.replace('/')
     },
   },
 };
@@ -41,14 +42,14 @@ export default {
         <i class="el-icon-s-home"></i>
         <span slot="title">首页</span>
       </el-menu-item>
-      <el-menu-item index="/UserHome">
+      <el-menu-item index="/UserHome" v-if="user.id!==0">
         <i class="el-icon-s-custom"></i>
         <span slot="title">我的主页</span>
       </el-menu-item>
       <el-submenu >
         <template slot="title"><i class="el-icon-help"></i><span>更多</span></template>
         <el-menu-item-group>
-          <el-menu-item index="/ChatMobile">
+          <el-menu-item index="/ChatMobile" v-if="user.id!==0">
             <i class="el-icon-chat-line-round"></i>
             <span slot="title">聊天</span>
           </el-menu-item>

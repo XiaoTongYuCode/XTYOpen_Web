@@ -1,4 +1,6 @@
 <script>
+import sha256 from 'crypto-js/sha256';
+import Base64 from 'crypto-js/enc-base64';
 export default {
   name: "LogIn",
   data() {
@@ -7,7 +9,6 @@ export default {
       if (this.form.id) {
         return callback();
       }
-
       this.$axios.post(this.$httpUrl + '/user/findByNo', {
         pageSize: '',
         pageNum: '',
@@ -23,16 +24,16 @@ export default {
       })
     };
     return {
+      autoLogin:false,
+
       loading: false,
       thirdLoading: false,
-      confirm_disabled: false,
       centerDialogVisible: false,
       haveUser: false,
       isMobile: false,
       haveUserIs:'',
       code:'',
       typeLog:'',
-      GoogleId: "903775319941-h0b8q3qvip0b7t6dubfa6ir9pqd65r6c.apps.googleusercontent.com",
       bgUrl: require('../assets/img/bg.jpg'),
       httpsBack: this.$httpUrl,
       sexs: [
@@ -66,7 +67,7 @@ export default {
           {required: true, message: '请输入名称', trigger: 'blur'}
         ],
         password: [
-          {required: true, message: '请输入密码', trigger: 'blur'}
+          {required: true, message: '请输入密码', trigger: 'change'}
         ],
         sex: [
           {required: true, message: '请输入性别', trigger: 'blur'}
@@ -106,6 +107,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true;
+          this.form.password = sha256(this.form.password + 'xtyopen').toString(Base64);
           this.$axios.post(this.$httpUrl + '/user/save', this.form).then(res => res.data)
               .then(res => {
                 if (res.code === 200) {
@@ -127,7 +129,6 @@ export default {
             // 在请求失败或超时时执行的操作
             console.log(error);
             this.loading = false;
-            this.confirm_disabled = false;
             this.$message({
               showClose: true,
               message: '请求失败或超时，请重试',
@@ -146,10 +147,10 @@ export default {
       });
     },
     confirm() {
-      this.confirm_disabled = true;
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading=true;
+          this.loginForm.password = sha256(this.loginForm.password + 'xtyopen').toString(Base64);
           this.$axios.post(this.$httpUrl + '/user/login', this.loginForm).then(res => res.data).then(res => {
             if (res.code == 200) {
 
@@ -173,11 +174,11 @@ export default {
               //跳转
               this.$router.replace('/Home')
             } else {
+              this.loginForm.password = "";
               this.loading=false;
-              this.confirm_disabled = false;
               this.$message({
                 showClose: true,
-                message: '账号或密码错误',
+                message: '账号或密码错误,因网站模式更改，已将用户密码改为123123，请登陆后自行修改新密码，谢谢',
                 type: 'error',
               });
             }
@@ -196,6 +197,8 @@ export default {
               confirmButtonText: '好的，我已点击',
             });
           });
+        }else {
+          console.log('error submit!!');
         }
       })
     },
@@ -206,65 +209,6 @@ export default {
           })
           .catch(() => {
           });
-    },
-    callback(googleUser) {
-      var tokens = googleUser.credential.split(".");
-      var payload = JSON.parse(atob(tokens[1]));
-      console.log(`user id ${payload.sub}`)
-      console.log(`user name ${payload.name}`)
-      console.log(`user picture ${payload.picture}`)
-      console.log(`user email ${payload.email}`)
-      this.$axios.post(this.$httpUrl + '/user/loginWithGoogle', {
-        id: '',
-        no: payload.sub,
-        name: payload.name,
-        password: '123',
-        age: 18,
-        sex: 0,
-        phone: payload.email,
-        roleId: '2',
-        isvalid: 'Y',
-        level: '0',
-        avatar: payload.picture
-      }).then(res => res.data)
-          .then(res => {
-            if (res.code == 200) {
-
-              this.$notify({
-                title: res.data.user.name,
-                message: '欢迎回来',
-                type: 'success'
-              });
-              // 储存
-              sessionStorage.setItem("CurUser", JSON.stringify(res.data.user))
-              this.$store.commit("setMenu", res.data.menu) // 设置传来路由
-
-              console.log(res.data.menu)
-              //跳转
-              this.$router.replace('/Index')
-
-            } else {
-              this.confirm_disabled = false;
-              this.$message({
-                showClose: true,
-                message: '账号或密码错误',
-                type: 'error',
-              });
-            }
-          }).catch(error => {
-        // 在请求失败或超时时执行的操作
-        console.log(error);
-        this.confirm_disabled = false;
-        this.$message({
-          showClose: true,
-          message: '请求失败或超时，请重试',
-          type: 'error',
-        });
-        this.$alert('<a href="'+ this.httpsBack + '/user/hi" target="_blank"> 前往授权访问以使用此网站</a>', '抱歉`(*>﹏<*)′需要您的授权', {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: '好的，我已点击',
-        });
-      });
     },
     checkIfMobile() {
       this.isMobile = window.innerWidth < 768; // Adjust the value based on your requirements
@@ -311,7 +255,6 @@ export default {
         // 在请求失败或超时时执行的操作
         console.log(error);
         this.loading = false;
-        this.confirm_disabled = false;
         this.$message({
           showClose: true,
           message: '请求失败或超时，请重试',
@@ -352,37 +295,57 @@ export default {
     window.removeEventListener('resize', this.checkIfMobile);
   },
   created() {
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    document.body.appendChild(script);
-
-    window.addEventListener("load", () => {
-      window.google.accounts.id.initialize({
-        // 主要就是填写client_id
-        client_id: this.GoogleId,
-        auto_select: false,
-        callback: this.callback,
-      });
-      // 设置按钮的样式等
-      window.google.accounts.id.renderButton(
-          document.getElementById("g_id_signin"),
-          {
-            size: "large",
-            type: "standard",
-            text: "signin_with",
-          }
-      );
-    });
     let userLogIn = localStorage.getItem("userLogIn");
     if(userLogIn){
       userLogIn = JSON.parse(userLogIn);
-      this.loginForm.no=userLogIn.no;
-      this.loginForm.password=userLogIn.password;
       this.haveUserIs = {
         avatar: userLogIn.avatar,
         name: userLogIn.name,
       };
       this.haveUser = true;
+      this.loading=true;
+      this.$axios.post(this.$httpUrl + '/user/login', {
+        no: userLogIn.no,
+        password: userLogIn.password,
+      }).then(res => res.data).then(res => {
+        if (res.code === 200) {
+          this.$notify({
+            title: res.data.user.name,
+            message: '欢迎回来',
+            type: 'success'
+          });
+          // 储存
+          sessionStorage.setItem("CurUser", JSON.stringify(res.data.user));
+          this.$store.commit("setMenu", res.data.menu); // 设置传来路由
+          // 以对象的形式保存账号密码
+          const user = {
+            no: res.data.user.no,
+            password: res.data.user.password,
+            name: res.data.user.name,
+            avatar: res.data.user.avatar
+          };
+          localStorage.setItem("userLogIn", JSON.stringify(user));//记住密码
+          this.loading=false;
+          //跳转
+          this.$router.replace('/Home')
+        } else {
+          this.loading=false;
+          this.$message({
+            showClose: true,
+            message: '账号或密码错误',
+            type: 'error',
+          });
+        }
+      }).catch(error => {
+        // 在请求失败或超时时执行的操作
+        console.log(error);
+        this.loading = false;
+        this.$message({
+          showClose: true,
+          message: '请求失败或超时，请重试',
+          type: 'error',
+        });
+      });
     }
   }
 };
@@ -442,14 +405,11 @@ export default {
                          @click="haveUser=false;"
                          v-if="this.haveUser"> 切换
               </el-button>
-              <el-button :disabled="confirm_disabled" :loading="loading" style="width: 70%; margin-top: 5px; font-size: large;" type="primary"
+              <el-button :loading="loading" style="width: 70%; margin-top: 5px; font-size: large;" type="primary"
                          @click="confirm">{{loading?"":(haveUser? "继续" : "登陆") }}
               </el-button>
             </el-col>
           </el-form-item>
-<!--          <div style="width: 100%;display: flex; justify-content: center;">
-            <div id="g_id_signin" class="g_id_signin"></div>
-          </div>-->
           <el-divider ></el-divider>
           <div style="display: flex;justify-content: center;" v-loading="thirdLoading">
             <div style="cursor: pointer;margin-right: 50px;" @click="thirdClick('qq')" >
