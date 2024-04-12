@@ -109,7 +109,7 @@ export default {
       }
     });
     // 启动开发者工具检测器
-    // devtoolsDetector.launch();
+    devtoolsDetector.launch();
     if(!sessionStorage.getItem('CurUser')) {
       const user = {
           age:0,
