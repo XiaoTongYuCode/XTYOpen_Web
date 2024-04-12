@@ -26,13 +26,13 @@
               type="password" @keyup.enter.native="up"
               style="margin: 30px 0;">
           </el-input>
-          <el-statistic :value="Date.now() + 1000 * 30" format="mm:ss:SSS" time-indices
+<!--          <el-statistic :value="Date.now() + 1000 * 30" format="mm:ss:SSS" time-indices
                         v-if="devtoolsOpen"
                         @finish="refuse" suffix="后我们将关闭您的访问"
                         ref="statistic"
                         style="font-size: 20px;"
           >
-          </el-statistic>
+          </el-statistic>-->
         </template>
       </el-result>
       <span slot="footer" class="dialog-footer"
@@ -101,7 +101,7 @@ export default {
     const view = document.createElement('div');
     this.$refs.view.appendChild(view);
 
-    // 监听开发者工具打开事件，如果开发者工具被打开，则重定向到 about:blank 页面
+    // 监听开发者工具打开事件，如果开发者工具被打开，
     devtoolsDetector.addListener(isOpen => {
       if (isOpen) {
         this.user=JSON.parse(sessionStorage.getItem('CurUser'));
@@ -132,8 +132,8 @@ export default {
   methods:{
     refuse(){//未通过，跳转其他页面
       if (sessionStorage.getItem("isClear")!=="Yes"){
-        sessionStorage.clear()
-        document.location.replace('about:blank');
+        // sessionStorage.clear()
+        // document.location.replace('about:blank');
       }else {
         this.devtoolsOpen=false;//关闭弹窗;
       }
@@ -148,10 +148,9 @@ export default {
           sessionStorage.setItem("isClear", "Yes");
 
           this.isSuccess=true;
-          // 5 秒后执行操作
           setTimeout(() => {
             this.devtoolsOpen=false;//关闭弹窗;
-          }, 4000); // 毫秒
+          }, 2000); // 毫秒
         } else {
           this.refuse();
         }
