@@ -26,6 +26,7 @@
               type="password" @keyup.enter.native="up"
               style="margin: 30px 0;">
           </el-input>
+          <div style="margin-top:5px;font-size: large;">若您无意点到，请关闭控制台</div>
 <!--          <el-statistic :value="Date.now() + 1000 * 30" format="mm:ss:SSS" time-indices
                         v-if="devtoolsOpen"
                         @finish="refuse" suffix="后我们将关闭您的访问"
@@ -83,19 +84,6 @@ export default {
     }
   },
 
-  // created() {
-  //   this.$router.beforeEach((to, from, next) => {
-  //     // 在路由导航开始时显示加载画面
-  //     this.AllLoading = true;
-  //     next();
-  //   });
-  //
-  //   this.$router.afterEach(() => {
-  //     // 在路由导航完成后隐藏加载画面
-  //     this.AllLoading = false;
-  //   });
-  // },
-
   mounted() {
     // 创建一个 div 元素，并将其添加到页面中
     const view = document.createElement('div');
@@ -106,6 +94,9 @@ export default {
       if (isOpen) {
         this.user=JSON.parse(sessionStorage.getItem('CurUser'));
         this.devtoolsOpen=true;
+      }
+      else {
+        this.devtoolsOpen=false;
       }
     });
     // 启动开发者工具检测器
@@ -143,16 +134,15 @@ export default {
         no:'未登录用户'
       }).then(res => res.data).then(res => {
         if (res.code === 200) {
-          this.$refs.statistic.suspend(true);//暂停计时
+          // this.$refs.statistic.suspend(true);
           devtoolsDetector.stop();//关闭控制台检测
           sessionStorage.setItem("isClear", "Yes");
-
           this.isSuccess=true;
           setTimeout(() => {
             this.devtoolsOpen=false;//关闭弹窗;
           }, 2000); // 毫秒
         } else {
-          this.refuse();
+          window.location.reload();
         }
       }).catch(error => {
         console.log(error)
