@@ -27,22 +27,6 @@ const routes = [
                 component:()=>import('../components/UserHome.vue')
             },
             {
-                path:'/Chat',
-                name:'Chat',
-                meta:{
-                    title:'聊天室'
-                },
-                component:()=>import('../components/Chat.vue')
-            },
-            {
-                path:'/ChatMobile',
-                name:'ChatMobile',
-                meta:{
-                    title:'手机聊天室'
-                },
-                component:()=>import('../components/ChatMobile.vue')
-            },
-            {
                 path:'/Post/:postId',
                 name:'Post',
                 meta:{

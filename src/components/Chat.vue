@@ -12,6 +12,7 @@ export default {
       user: JSON.parse(sessionStorage.getItem('CurUser')),
       isCollapse: false,
       users: [],
+      usersHistory: [],
       historyChat: [],
       chatUser: '',
       text: "",
@@ -141,12 +142,14 @@ export default {
         };
         //  浏览器端收消息，获得从服务端发送过来的文本消息
         socket.onmessage = function (msg) {
-          console.log("收到数据====" + msg.data)
           let data = JSON.parse(msg.data)  // 对收到的json数据进行解析， 类似这样的： {"users": [{"username": "zhang"},{ "username": "admin"}]}
           if (data.users) {  // 获取在线人员信息
             _this.users = data.users.filter(user => user.username !== username) // 获取当前连接的所有用户信息，并且排除自身，自己不会出现在自己的聊天列表里
+          }else if(data.usersHistory){
+            _this.usersHistory = data.usersHistory.filter(user => user.username !== username)
             if (!_this.chatUser && data.users.length > 1) _this.history(data.users.filter(user => user.username !== username)[0].username);
-          } else {
+          }
+          else {
             // 如果服务器端发送过来的json数据 不包含 users 这个key，那么发送过来的就是聊天文本json数据
             //  // {"from": "zhang", "text": "hello"}
             if (data.from === _this.chatUser) {
@@ -192,7 +195,7 @@ export default {
               <el-avatar :size="40" :src="this.user.avatar" style="margin-right: 12px;">我</el-avatar>
               <span style="font-size: 1.1vw; position:relative; top: -12px;">{{ this.user.name }}</span>
             </el-button>
-            <div v-for="user in users" :key="user.username" style="padding: 10px 0; text-align: center;" @click="history(user.username)">
+            <div v-for="user in users.concat(usersHistory)" :key="user.username" style="padding: 10px 0; text-align: center;" @click="history(user.username)">
 <!--              badge新消息气泡-->
               <el-badge :value="user.newMessage" :max="10" :hidden="user.newMessage===0" style="width: 100%;">
                 <el-button style="width: 100%;">

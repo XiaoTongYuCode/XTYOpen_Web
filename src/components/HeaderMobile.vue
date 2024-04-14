@@ -49,10 +49,6 @@ export default {
       <el-submenu >
         <template slot="title"><i class="el-icon-help"></i><span>更多</span></template>
         <el-menu-item-group>
-          <el-menu-item index="/ChatMobile" v-if="user.id!==0">
-            <i class="el-icon-chat-line-round"></i>
-            <span slot="title">聊天</span>
-          </el-menu-item>
           <!--动态菜单-->
           <el-menu-item v-for="(item,i) in menu" :key="i"
                         :index="'/' + item.menuClick">

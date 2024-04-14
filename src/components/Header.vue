@@ -105,11 +105,6 @@ export default {
             <span v-if="menuFont" slot="title">{{ item.menuName }}</span>
           </el-menu-item>
 
-          <el-menu-item index="/Chat" v-if="user.id!==0">
-            <i class="el-icon-chat-line-round"></i>
-            <span v-if="menuFont" slot="title">聊天</span>
-          </el-menu-item>
-
           <el-menu-item index="/UserHome" v-if="user.id!==0">
             <i class="el-icon-s-custom"></i>
             <span v-if="menuFont" slot="title">个人中心</span>
