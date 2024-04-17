@@ -38,7 +38,6 @@ export default {
           message: '您已退出登陆',
         });
         sessionStorage.clear()
-        localStorage.clear()
         this.$router.replace('/')
       }).catch(() => {
 

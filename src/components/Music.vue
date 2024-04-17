@@ -686,7 +686,6 @@ function musicCheckUrl(file) {
 }
 /deep/ .musicDialog {
   background-color: #333333;
-  //background-image: url("../assets/video/ingame.gif");
   z-index: -10;
 }
 /deep/ .el-loading-mask{

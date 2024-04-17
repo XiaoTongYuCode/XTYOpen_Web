@@ -103,6 +103,51 @@ export default {
         this.resetForm('form');
       })
     },
+    haveUserLogin(){
+      this.loading=true;
+      this.$axios.post(this.$httpUrl + '/user/login', {
+        no: this.haveUserIs.no,
+        password: this.haveUserIs.password,
+      }).then(res => res.data).then(res => {
+        if (res.code === 200) {
+          this.$notify({
+            title: res.data.user.name,
+            message: '欢迎回来',
+            type: 'success'
+          });
+          // 储存
+          sessionStorage.setItem("CurUser", JSON.stringify(res.data.user));
+          this.$store.commit("setMenu", res.data.menu); // 设置传来路由
+          // 以对象的形式保存账号密码
+          const user = {
+            no: res.data.user.no,
+            password: res.data.user.password,
+            name: res.data.user.name,
+            avatar: res.data.user.avatar
+          };
+          localStorage.setItem("userLogIn", JSON.stringify(user));//记住密码
+          this.loading=false;
+          //跳转
+          this.$router.replace('/Home')
+        } else {
+          this.loading=false;
+          this.$message({
+            showClose: true,
+            message: '账号或密码错误',
+            type: 'error',
+          });
+        }
+      }).catch(error => {
+        // 在请求失败或超时时执行的操作
+        console.log(error);
+        this.loading = false;
+        this.$message({
+          showClose: true,
+          message: '请求失败或超时，请重试',
+          type: 'error',
+        });
+      });
+    },
     save() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
@@ -147,6 +192,11 @@ export default {
       });
     },
     confirm() {
+      if (this.haveUser) { //记住用户，直接登陆，不加密
+        this.haveUserLogin();
+        return;
+      }
+
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading=true;
@@ -277,7 +327,7 @@ export default {
         window.open(res, '_blank');
         this.thirdLoading = false;
       })
-    }
+    },
 
   },
   mounted() {
@@ -301,51 +351,10 @@ export default {
       this.haveUserIs = {
         avatar: userLogIn.avatar,
         name: userLogIn.name,
-      };
-      this.haveUser = true;
-      this.loading=true;
-      this.$axios.post(this.$httpUrl + '/user/login', {
         no: userLogIn.no,
         password: userLogIn.password,
-      }).then(res => res.data).then(res => {
-        if (res.code === 200) {
-          this.$notify({
-            title: res.data.user.name,
-            message: '欢迎回来',
-            type: 'success'
-          });
-          // 储存
-          sessionStorage.setItem("CurUser", JSON.stringify(res.data.user));
-          this.$store.commit("setMenu", res.data.menu); // 设置传来路由
-          // 以对象的形式保存账号密码
-          const user = {
-            no: res.data.user.no,
-            password: res.data.user.password,
-            name: res.data.user.name,
-            avatar: res.data.user.avatar
-          };
-          localStorage.setItem("userLogIn", JSON.stringify(user));//记住密码
-          this.loading=false;
-          //跳转
-          this.$router.replace('/Home')
-        } else {
-          this.loading=false;
-          this.$message({
-            showClose: true,
-            message: '账号或密码错误',
-            type: 'error',
-          });
-        }
-      }).catch(error => {
-        // 在请求失败或超时时执行的操作
-        console.log(error);
-        this.loading = false;
-        this.$message({
-          showClose: true,
-          message: '请求失败或超时，请重试',
-          type: 'error',
-        });
-      });
+      };
+      this.haveUser = true;
     }
   }
 };
@@ -428,16 +437,13 @@ export default {
     </div>
 
     <!--    以下根据是否为手机选择切换背景为MP4还是GIF格式-->
-<!--    <div class="video-container" v-if="!isMobile">
+    <div class="video-container" v-if="!isMobile">
       <video ref="videoRef" autoplay class="video" loop muted>
-        <source src="../assets/video/grassland.mp4" type="video/mp4"/>
+        <source src="../assets/video/snow.mp4" type="video/mp4"/>
       </video>
     </div>
-    <div class="MobileBack" v-if="isMobile">
+<!--    <div class="ImgBack">
     </div>-->
-    <div class="ImgBack">
-
-    </div>
 
     <el-dialog
         :before-close="handleClose"
@@ -490,19 +496,6 @@ export default {
 <style scoped>
 /deep/ .el-divider--horizontal{
   margin: 10px 0 15px 0;
-}
-
-.MobileBack{
-  z-index: -100;
-  position: fixed;
-  background-image: url("../assets/video/ingame.gif");
-  background-size: cover;
-  background-position: center;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
 }
 .ImgBack{
   z-index: -100;
