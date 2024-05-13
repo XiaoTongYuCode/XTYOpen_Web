@@ -17,7 +17,7 @@ import VueSmoothScroll from "vue2-smooth-scroll";
 Vue.prototype.$music = new Audio();
 Vue.prototype.$axios=axios;
 Vue.prototype.$httpUrl='https://8.140.192.183:9000'; //后端地址
-Vue.prototype.$httpWYY='https://8.140.192.183:8000'; //爬虫后端地址
+Vue.prototype.$httpWYY='https://8.140.192.183:8003'; //爬虫后端地址
 // Vue.prototype.$httpUrl=' https://localhost:9000'; //后端地址
 // Vue.prototype.$httpWYY=' https://localhost:8000'; //爬虫后端地址
 Vue.config.productionTip = false
