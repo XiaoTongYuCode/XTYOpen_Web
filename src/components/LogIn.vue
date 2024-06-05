@@ -1,6 +1,8 @@
 <script>
 import sha256 from 'crypto-js/sha256';
 import Base64 from 'crypto-js/enc-base64';
+
+import '../assets/star.css';//对勾动画css
 export default {
   name: "LogIn",
   data() {
@@ -436,14 +438,11 @@ export default {
       </div>
     </div>
 
-    <!--    以下根据是否为手机选择切换背景为MP4还是GIF格式-->
-    <div class="video-container" v-if="!isMobile">
-      <video ref="videoRef" autoplay class="video" loop muted>
-        <source src="../assets/video/snow.mp4" type="video/mp4"/>
-      </video>
+    <div class="ImgBack">
+      <div id="stars"></div>
+      <div id="stars2"></div>
+      <div id="stars3"></div>
     </div>
-<!--    <div class="ImgBack">
-    </div>-->
 
     <el-dialog
         :before-close="handleClose"
@@ -500,7 +499,6 @@ export default {
 .ImgBack{
   z-index: -100;
   position: fixed;
-  background-image: url("../assets/img/bg.jpg");
   background-size: cover;
   background-position: center;
   top: 0;
@@ -508,21 +506,6 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
-}
-
-.video-container {
-  z-index: -100;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #333333;
-}
-
-.video {
-  object-fit: cover;
 }
 
 @media (min-width: 768px) {
@@ -543,8 +526,6 @@ export default {
     background: transparent;
     box-shadow: 0 15px 20px rgba(0, 0, 0, 0);
     transition: .5s;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
     transition-delay: 4s; /* 4秒的延迟 */
   }
 
