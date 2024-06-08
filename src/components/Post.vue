@@ -170,10 +170,10 @@ export default {
       <el-card v-for="(item,i) in PostMain" :key="i" class="box-card">
         <div slot="header" style="display: flex; align-items: center; justify-content: space-between;">
           <div v-if="!isMobile">
-            <el-avatar :size="40" :src="item.post.avatar" style="margin: 0px 10px;">{{
-                item.post.userno.charAt(0)
+            <el-avatar :size="40" :src="item.user.avatar" style="margin: 0px 10px;">{{
+                item.user.no.charAt(0)
               }}</el-avatar>
-            <span style="position: relative; top: -12px;font-size: 1vw;">{{ item.post.userno }}</span>
+            <span style="position: relative; top: -12px;font-size: 1vw;">{{ item.user.name }}</span>
           </div>
 
           <div class="box-card-title">
@@ -187,10 +187,10 @@ export default {
           </div>
         </div>
         <div v-if="isMobile">
-          <el-avatar :size="40" :src="item.post.avatar" style="margin: 0 10px;">{{
-              item.post.userno.charAt(0)
+          <el-avatar :size="40" :src="item.user.avatar" style="margin: 0 10px;">{{
+              item.user.no.charAt(0)
             }}</el-avatar>
-          <span style="position: relative; top: -12px;font-size: 1em;">{{ item.post.userno }}</span>
+          <span style="position: relative; top: -12px;font-size: 1em;">{{ item.user.name }}</span>
         </div>
         <div class="text item" style="white-space: pre-line; padding: 0 15px; min-height: 150px; ">
           <div class="ql-editor" v-html="item.post.name" v-highlight></div>
