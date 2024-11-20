@@ -140,15 +140,19 @@ export default {
           });
         }
       }).catch(error => {
-        // 在请求失败或超时时执行的操作
-        console.log(error);
-        this.loading = false;
-        this.$message({
-          showClose: true,
-          message: '请求失败或超时，请重试',
-          type: 'error',
-        });
-      });
+            // 在请求失败或超时时执行的操作
+            console.log(error);
+            this.loading = false;
+            this.$message({
+              showClose: true,
+              message: '请求失败或超时，请重试',
+              type: 'error',
+            });
+            this.$alert('<a href="'+ this.httpsBack + '/user/hi" target="_blank"> 点此授权访问 以使用此网站</a>', '抱歉`(*>﹏<*)′需要您的授权', {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: '好的，我已点击',
+            });
+          });
     },
     save() {
       this.$refs['form'].validate((valid) => {
